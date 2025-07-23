@@ -20,10 +20,14 @@ namespace CLTL
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow : Window, INotifyPropertyChanged
 	{
+		private List<int> searchList = new();
 		public ObservableCollection<TLEvent> TLEventsStorage { get; set; } = [];
 		public ObservableCollection<TLEvent> TLEvents { get; set; } = [];
+		public string SearchResults { get => $"{SearchIndex} / {SearchCount}"; }
+		public int SearchIndex { get; set; }
+		public int SearchCount { get; set; }
 
 		const int TLEventControlCount = 50;
 
@@ -42,6 +46,9 @@ namespace CLTL
 		}
 
 		TLEvent? prvTLE = null;
+
+		public event PropertyChangedEventHandler? PropertyChanged;
+
 		void LoadFile(string filePath)
 		{
 			if (!File.Exists(filePath)) return;
@@ -89,13 +96,66 @@ namespace CLTL
 				if (index < TLEventsStorage.Count) TLEvents[i] = TLEventsStorage[index];
 				else break;
 			}
+			UpdateSlider(startIndex);
+		}
 
+		bool ignoreSliderValueChanged = false;
+		private void UpdateSlider(int startIndex)
+		{
+			ignoreSliderValueChanged = true;
+
+			slider.Value = (double)startIndex / TLEventsStorage.Count;
 		}
 
 		private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
+			bool isvc = ignoreSliderValueChanged;
+			ignoreSliderValueChanged= false;
+			if (isvc) return;
+
 			int index = (int)((TLEventsStorage.Count - TLEventControlCount) * e.NewValue);
 			SetEventsView(index);
+		}
+
+		private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			SearchCount = Serach(searchBox.Text);
+			PropertyChanged?.Invoke(this, new(nameof(SearchResults)));
+		}
+
+		private int Serach(string text)
+		{
+			SearchIndex = 0;
+			int sc = 0;
+			int i = 0;
+			searchList.Clear();
+			foreach(TLEvent tle in TLEventsStorage)
+			{
+				if (tle.Description.Contains(text))
+				{
+					searchList.Add(i);
+					sc++;
+				}
+				i++;
+			}
+			return sc;
+		}
+
+		private void searchBox_PreviewKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Enter)
+			{
+				if (!Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+				{
+					if (SearchIndex < SearchCount) SearchIndex++;
+				}
+				else
+				{
+					if (SearchIndex > 1) SearchIndex--;
+				}
+				PropertyChanged?.Invoke(this, new(nameof(SearchResults)));
+				if(SearchIndex > 0) SetEventsView(searchList[SearchIndex-1]);
+			}
 		}
 	}
 }

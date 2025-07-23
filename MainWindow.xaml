@@ -10,11 +10,22 @@
 		Loaded="Window_Loaded">
 	<Grid Margin="30">
 		<Grid.RowDefinitions>
+			<RowDefinition Height="50"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="50"/>
 		</Grid.RowDefinitions>
-		
-		<ItemsControl Grid.Row="0" ItemsSource="{Binding TLEvents}" >
+		<Grid Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="100"/>
+			</Grid.ColumnDefinitions>
+			<Label Grid.Column="0" Content="Find" VerticalAlignment="Center"/>
+			<TextBox Name="searchBox" Grid.Column="1" Margin="10" VerticalContentAlignment="Center" TextChanged="TextBox_TextChanged" PreviewKeyDown="searchBox_PreviewKeyDown"/>
+			<Label Grid.Column="2" Content="{Binding SearchResults}" VerticalAlignment="Center"/>
+		</Grid>
+
+		<ItemsControl Grid.Row="1" ItemsSource="{Binding TLEvents}" >
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
 					<local:OverlappingCanvasPanel LeftOffset="20" TopOffset="0"/>
@@ -26,6 +37,6 @@
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>
-		<Slider Name="slider" Grid.Row="1" VerticalAlignment="Center" ValueChanged="Slider_ValueChanged" Maximum="1" LargeChange="0.1" SmallChange="0.01"/>
+		<Slider Name="slider" Grid.Row="2" VerticalAlignment="Center" ValueChanged="Slider_ValueChanged" Maximum="1" LargeChange="0.1" SmallChange="0.01"/>
 	</Grid>
 </Window>
