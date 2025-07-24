@@ -37,6 +37,14 @@
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>
-		<Slider Name="slider" Grid.Row="2" VerticalAlignment="Center" ValueChanged="Slider_ValueChanged" Maximum="1" LargeChange="0.1" SmallChange="0.01"/>
+		<Grid Grid.Row="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="100"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<Label Grid.Column="0" Content="{Binding Value, ElementName=slider}" ContentStringFormat="N0" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+			<Slider Name="slider" Grid.Column="1" VerticalAlignment="Center" ValueChanged="Slider_ValueChanged" Maximum="1" LargeChange="0.1" SmallChange="0.01" AutoToolTipPlacement="TopLeft"/>
+		</Grid>
 	</Grid>
 </Window>

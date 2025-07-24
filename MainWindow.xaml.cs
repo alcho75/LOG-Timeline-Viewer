@@ -81,9 +81,16 @@ namespace CLTL
 
 				Title += $" - {TLEventsStorage.Count} lines";
 
-				slider.SmallChange = (slider.Maximum / TLEventsStorage.Count);
-				slider.LargeChange = slider.SmallChange * TLEventControlCount;
-				
+				slider.Value = 0;
+				if (TLEventsStorage.Count > TLEventControlCount)
+				{
+					slider.IsEnabled = true;
+					slider.Maximum = TLEventsStorage.Count - TLEventControlCount;
+					slider.SmallChange = 1;
+					slider.LargeChange = slider.SmallChange * TLEventControlCount;
+				}
+				else slider.IsEnabled = false;
+
 				SetEventsView(0);
 			}
 		}
@@ -96,25 +103,11 @@ namespace CLTL
 				if (index < TLEventsStorage.Count) TLEvents[i] = TLEventsStorage[index];
 				else break;
 			}
-			UpdateSlider(startIndex);
-		}
-
-		bool ignoreSliderValueChanged = false;
-		private void UpdateSlider(int startIndex)
-		{
-			ignoreSliderValueChanged = true;
-
-			slider.Value = (double)startIndex / TLEventsStorage.Count;
 		}
 
 		private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			bool isvc = ignoreSliderValueChanged;
-			ignoreSliderValueChanged= false;
-			if (isvc) return;
-
-			int index = (int)((TLEventsStorage.Count - TLEventControlCount) * e.NewValue);
-			SetEventsView(index);
+			SetEventsView((int)e.NewValue);
 		}
 
 		private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -131,7 +124,7 @@ namespace CLTL
 			searchList.Clear();
 			foreach(TLEvent tle in TLEventsStorage)
 			{
-				if (tle.Description.Contains(text))
+				if (tle.Description.Contains(text) || (tle.Interval.ToString().Contains(text)))
 				{
 					searchList.Add(i);
 					sc++;
@@ -145,17 +138,29 @@ namespace CLTL
 		{
 			if (e.Key == Key.Enter)
 			{
+				if (SearchCount == 0) return;
+
 				if (!Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
 				{
 					if (SearchIndex < SearchCount) SearchIndex++;
+					else SearchIndex = 1;
 				}
 				else
 				{
 					if (SearchIndex > 1) SearchIndex--;
+					else SearchIndex = SearchCount;
 				}
 				PropertyChanged?.Invoke(this, new(nameof(SearchResults)));
-				if(SearchIndex > 0) SetEventsView(searchList[SearchIndex-1]);
+				if (SearchIndex > 0)
+				{
+					UpdateSlider(searchList[SearchIndex - 1]);
+				}
 			}
+		}
+
+		private void UpdateSlider(int startIndex)
+		{
+			slider.Value = startIndex;
 		}
 	}
 }
