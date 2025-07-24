@@ -14,6 +14,7 @@
 		</Grid.RowDefinitions>
 		<Polyline x:Name="poly" Grid.Row="1" Points="20,1 1,1 1,10 6,19" Stroke="Red" StrokeThickness="2"/>
 		<Label
+			Name="description"
 			Grid.Row="1"
 			Width="1000"
 			Content="{Binding Description}"
@@ -27,6 +28,15 @@
 			Padding="0"
 			Margin="0,20,0,0"
 			d:Content="ABC">
+			<Label.Style>
+				<Style TargetType="Label"> 
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding SearchMatch}" Value="true">
+							<Setter Property="FontWeight" Value="UltraBlack"/>
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Label.Style>
 			<Label.LayoutTransform>
 				<RotateTransform Angle="60"/>
 			</Label.LayoutTransform>

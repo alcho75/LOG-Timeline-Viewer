@@ -100,7 +100,10 @@ namespace CLTL
 			for (int i = 0; i < TLEventControlCount; i++)
 			{
 				int index = i + startIndex;
-				if (index < TLEventsStorage.Count) TLEvents[i] = TLEventsStorage[index];
+				if (index < TLEventsStorage.Count)
+				{
+					TLEvents[i] = TLEventsStorage[index];
+				}
 				else break;
 			}
 		}
@@ -124,10 +127,15 @@ namespace CLTL
 			searchList.Clear();
 			foreach(TLEvent tle in TLEventsStorage)
 			{
-				if (tle.Description.Contains(text) || (tle.Interval.ToString().Contains(text)))
+				tle.SearchMatch = false;
+				if (text != "")
 				{
-					searchList.Add(i);
-					sc++;
+					if (tle.Description.Contains(text) || (tle.Interval.ToString().Contains(text)))
+					{
+						tle.SearchMatch = true;
+						searchList.Add(i);
+						sc++;
+					}
 				}
 				i++;
 			}

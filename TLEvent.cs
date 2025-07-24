@@ -1,10 +1,26 @@
-﻿namespace CLTL
+﻿using System.ComponentModel;
+
+namespace CLTL
 {
-	public class TLEvent
+	public class TLEvent : INotifyPropertyChanged
 	{
+
 		public int ms { get; set; }
 		public int Interval { get; set; }
 		public string Description { get; set; } = "---";
+
+		private bool searchMatch;
+		public bool SearchMatch
+		{
+			get => searchMatch;
+			set
+			{
+				searchMatch = value;
+				PropertyChanged?.Invoke(this, new(nameof(SearchMatch)));
+			}
+		}
+
+		public event PropertyChangedEventHandler? PropertyChanged;
 
 		public static TLEvent? FromString(string line)
 		{
