@@ -10,7 +10,7 @@
 		Loaded="Window_Loaded">
 	<DockPanel>
 		<Menu DockPanel.Dock="Top" FontSize="24" FontWeight="UltraBlack">
-			<MenuItem Header="Reload" Click="MenuItem_Click"/>
+			<MenuItem Header="_Reload" Click="MenuItem_Click" IsTabStop="False"/>
 		</Menu>
 		<Grid Margin="30">
 			<Grid.RowDefinitions>
@@ -29,7 +29,7 @@
 				<Label Grid.Column="2" Content="{Binding SearchResults}" VerticalAlignment="Center"/>
 			</Grid>
 
-			<ItemsControl Grid.Row="1" ItemsSource="{Binding TLEvents}">
+			<ItemsControl Grid.Row="1" ItemsSource="{Binding TLEvents}" IsTabStop="False">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
 						<local:OverlappingCanvasPanel LeftOffset="20" TopOffset="0"/>
