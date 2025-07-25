@@ -1,7 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -40,9 +42,18 @@ namespace CLTL
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
+			Reload();
+		}
 
+		private void Reload()
+		{
 			LoadLogs();
 			slider.Focus();
+
+			if(searchBox.Text != "")
+			{
+				Search
+			}
 		}
 
 		TLEvent? prvTLE = null;
@@ -77,7 +88,10 @@ namespace CLTL
 			{
 				TLEventsStorage.Clear();
 
-				foreach (string path in Directory.GetFiles(ofd.FolderName, "*.log")) LoadFile(path);
+				List<string> files = [.. Directory.GetFiles(ofd.FolderName, "*.log")];
+				files.Sort();
+
+				foreach (string path in files) LoadFile(path);
 
 				Title += $" - {TLEventsStorage.Count} lines";
 
@@ -104,7 +118,7 @@ namespace CLTL
 				{
 					TLEvents[i] = TLEventsStorage[index];
 				}
-				else break;
+				else TLEvents[i].Clear();
 			}
 		}
 
@@ -114,6 +128,11 @@ namespace CLTL
 		}
 
 		private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			Search();
+		}
+
+		private void Search()
 		{
 			SearchCount = Serach(searchBox.Text);
 			PropertyChanged?.Invoke(this, new(nameof(SearchResults)));
@@ -169,6 +188,11 @@ namespace CLTL
 		private void UpdateSlider(int startIndex)
 		{
 			slider.Value = startIndex;
+		}
+
+		private void MenuItem_Click(object sender, RoutedEventArgs e)
+		{
+			Reload();
 		}
 	}
 }

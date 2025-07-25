@@ -8,43 +8,48 @@
 		Title="LOG Timeline Viewer" Height="450" Width="1400"
 		DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}"
 		Loaded="Window_Loaded">
-	<Grid Margin="30">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="50"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="50"/>
-		</Grid.RowDefinitions>
-		<Grid Grid.Row="0">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="auto"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="100"/>
-			</Grid.ColumnDefinitions>
-			<Label Grid.Column="0" Content="Find" VerticalAlignment="Center"/>
-			<TextBox Name="searchBox" Grid.Column="1" Margin="10" VerticalContentAlignment="Center" TextChanged="TextBox_TextChanged" PreviewKeyDown="searchBox_PreviewKeyDown"/>
-			<Label Grid.Column="2" Content="{Binding SearchResults}" VerticalAlignment="Center"/>
-		</Grid>
+	<DockPanel>
+		<Menu DockPanel.Dock="Top" FontSize="24" FontWeight="UltraBlack">
+			<MenuItem Header="Reload" Click="MenuItem_Click"/>
+		</Menu>
+		<Grid Margin="30">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="50"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="50"/>
+			</Grid.RowDefinitions>
+			<Grid Grid.Row="0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="100"/>
+				</Grid.ColumnDefinitions>
+				<Label Grid.Column="0" Content="Find" VerticalAlignment="Center"/>
+				<TextBox Name="searchBox" Grid.Column="1" Margin="10" VerticalContentAlignment="Center" TextChanged="TextBox_TextChanged" PreviewKeyDown="searchBox_PreviewKeyDown"/>
+				<Label Grid.Column="2" Content="{Binding SearchResults}" VerticalAlignment="Center"/>
+			</Grid>
 
-		<ItemsControl Grid.Row="1" ItemsSource="{Binding TLEvents}" >
-			<ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<local:OverlappingCanvasPanel LeftOffset="20" TopOffset="0"/>
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
-			<ItemsControl.ItemTemplate>
-				<DataTemplate DataType="local:TLEvent">
-					<local:EventControl/>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
-		<Grid Grid.Row="2">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="100"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>
+			<ItemsControl Grid.Row="1" ItemsSource="{Binding TLEvents}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<local:OverlappingCanvasPanel LeftOffset="20" TopOffset="0"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate DataType="local:TLEvent">
+						<local:EventControl Margin="5,0,5,0"/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+			<Grid Grid.Row="2">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="50"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
 
-			<Label Grid.Column="0" Content="{Binding Value, ElementName=slider}" ContentStringFormat="N0" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-			<Slider Name="slider" Grid.Column="1" VerticalAlignment="Center" ValueChanged="Slider_ValueChanged" Maximum="1" LargeChange="0.1" SmallChange="0.01" AutoToolTipPlacement="TopLeft"/>
+				<Label Grid.Column="0" Content="{Binding Value, ElementName=slider}" ContentStringFormat="F0" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+				<Slider Name="slider" Grid.Column="1" VerticalAlignment="Center" ValueChanged="Slider_ValueChanged" Maximum="1" LargeChange="0.1" SmallChange="0.01" AutoToolTipPlacement="TopLeft"/>
+			</Grid>
 		</Grid>
-	</Grid>
+	</DockPanel>
 </Window>

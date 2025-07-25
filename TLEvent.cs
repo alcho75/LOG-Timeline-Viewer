@@ -5,9 +5,38 @@ namespace CLTL
 	public class TLEvent : INotifyPropertyChanged
 	{
 
-		public int ms { get; set; }
-		public int Interval { get; set; }
-		public string Description { get; set; } = "---";
+		private int _ms;
+		public int ms
+		{
+			get => _ms;
+			set
+			{
+				_ms = value;
+				PropertyChanged?.Invoke(this, new(nameof(ms)));
+			}
+		}
+
+		private int interval;
+		public int Interval
+		{
+			get => interval;
+			set
+			{
+				interval = value;
+				PropertyChanged?.Invoke(this, new(nameof(Interval)));
+			}
+		}
+
+		private string description = "---";
+		public string Description
+		{
+			get => description;
+			set
+			{
+				description = value;
+				PropertyChanged?.Invoke(this, new(nameof(Description)));
+			}
+		}
 
 		private bool searchMatch;
 		public bool SearchMatch
@@ -38,6 +67,11 @@ namespace CLTL
 			return null;
 		}
 
-
+		internal void Clear()
+		{
+			ms = 0;
+			Interval = 0;
+			Description = "---";
+		}
 	}
 }
