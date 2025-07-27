@@ -69,14 +69,25 @@ namespace CLTL
 				TLEvent? tle = TLEvent.FromString(line);
 				if (tle != null)
 				{
-					if (prvTLE != null)
+					if (prvTLE != null) prvTLE.Interval = tle.ms - prvTLE.ms;
+					if (!FindDuplicate(tle))
 					{
-						prvTLE.Interval = tle.ms - prvTLE.ms;
+						TLEventsStorage.Add(tle);
+						prvTLE = tle;
 					}
-					TLEventsStorage.Add(tle);
-					prvTLE = tle;
 				}
 			}
+		}
+
+		private bool FindDuplicate(TLEvent tle)
+		{
+			foreach (TLEvent tl in TLEventsStorage)
+				if(tl.GetHashCode() == tle.GetHashCode())
+					if(tl.ms == tle.ms)
+						if(tl.Description == tle.Description)
+							return true;
+
+			return false;
 		}
 
 		void LoadLogs()
