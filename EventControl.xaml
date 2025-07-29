@@ -69,7 +69,6 @@
 			Width="100"
 			Content="{Binding Interval}"
 			FontSize="9"
-			Foreground="Red"
 			HorizontalAlignment="Left"
 			VerticalAlignment="Top"
 			HorizontalContentAlignment="Left"
@@ -79,9 +78,13 @@
 			d:Content="1H">
 			<Label.Style>
 				<Style TargetType="Label">
+					<Setter Property="Foreground" Value="Red"/>
 					<Style.Triggers>
 						<DataTrigger Binding="{Binding SearchMatch}" Value="true">
 							<Setter Property="FontWeight" Value="UltraBlack"/>
+						</DataTrigger>
+						<DataTrigger Binding="{Binding IsIntervalNegative}" Value="true">
+							<Setter Property="Foreground" Value="Blue"/>
 						</DataTrigger>
 					</Style.Triggers>
 				</Style>

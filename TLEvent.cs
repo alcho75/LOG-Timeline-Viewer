@@ -27,6 +27,8 @@ namespace CLTL
 			}
 		}
 
+		public bool IsIntervalNegative { get => (Interval < 0); }
+
 		private string description = "---";
 		public string Description
 		{
